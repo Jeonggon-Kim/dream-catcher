@@ -110,7 +110,6 @@ const ChatUI = () => {
         flexDirection: "column",
         justifyContent: "space-between",
         height: "80vh",
-        width: "400px",
         margin: "auto",
         border: "1px solid #ddd",
         borderRadius: "8px",

@@ -20,7 +20,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`} style={{width:"393px", height:"100%", margin:"0 auto", backgroundColor:"lightblue"}}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable}`} style={{ maxWidth: "393px", margin: "0 auto", border: "1px solid" }}>
         {children}
       </body>
     </html>

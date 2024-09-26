@@ -7,7 +7,7 @@ export default async function Home() {
   let result = await db.collection('diary').find().toArray()
 
   return (
-    <div className="list-bg">
+    <div style={{width:"100%", backgroundColor:"black"}} className="list-bg">
       {
         result.map((a, i) => {
           return (
