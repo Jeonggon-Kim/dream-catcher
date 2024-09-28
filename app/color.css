@@ -1,0 +1,123 @@
+/* Figma Styles of your File */
+:root {
+    /* Colors */
+    --black: #090909;
+    --white-100: #f0ecf1;
+    --white-80: rgba(240, 236, 241, 0.8);
+    --white-50: rgba(240, 236, 241, 0.5);
+    --white-30: rgba(242, 242, 242, 0.3);
+    --white-15: rgba(241, 236, 240, 0.15);
+    --white-5: rgba(241, 236, 240, 0.05);
+    --purple-300: #d3d0ff;
+    --purple-400: #938cf3;
+    --purple-500: #825dff;
+    --purple-600: #6536e7;
+    --purple-700: #5011d7;
+    --purple-800: #300986;
+    --purple-900: #300986;
+    --wireframe-1: #efefef;
+    --wireframe-2: #cdcdcd;
+    --wireframe-3: #adadad;
+    --wireframe-4: #5c5c5c;
+    --gradient-white: linear-gradient(
+      90deg,
+      rgba(240, 236, 241, 0.6) 0%,
+      rgba(240, 236, 241, 1) 50.08704662322998%,
+      rgba(240, 236, 241, 0.8) 100%
+    );
+  
+    /* Fonts */
+    --title-24-semiblod-font-family: Pretendard-SemiBold, sans-serif;
+    --title-24-semiblod-font-size: 24px;
+    --title-24-semiblod-line-height: 140%;
+    --title-24-semiblod-font-weight: 600;
+    --title-24-semiblod-font-style: normal;
+    --title-22-semibold-font-family: Pretendard-SemiBold, sans-serif;
+    --title-22-semibold-font-size: 22px;
+    --title-22-semibold-line-height: 140%;
+    --title-22-semibold-font-weight: 600;
+    --title-22-semibold-font-style: normal;
+    --title-20-medium-font-family: Pretendard-Medium, sans-serif;
+    --title-20-medium-font-size: 20px;
+    --title-20-medium-line-height: 140%;
+    --title-20-medium-font-weight: 500;
+    --title-20-medium-font-style: normal;
+    --title-18-semibold-font-family: Pretendard-SemiBold, sans-serif;
+    --title-18-semibold-font-size: 18px;
+    --title-18-semibold-line-height: 140%;
+    --title-18-semibold-font-weight: 600;
+    --title-18-semibold-font-style: normal;
+    --title-18-medium-font-family: Pretendard-Medium, sans-serif;
+    --title-18-medium-font-size: 18px;
+    --title-18-medium-line-height: 140%;
+    --title-18-medium-font-weight: 500;
+    --title-18-medium-font-style: normal;
+    --sub-title-16-semibold-font-family: Pretendard-SemiBold, sans-serif;
+    --sub-title-16-semibold-font-size: 16px;
+    --sub-title-16-semibold-line-height: 150%;
+    --sub-title-16-semibold-font-weight: 600;
+    --sub-title-16-semibold-font-style: normal;
+    --sub-title-16-medium-font-family: Pretendard-Medium, sans-serif;
+    --sub-title-16-medium-font-size: 16px;
+    --sub-title-16-medium-line-height: 150%;
+    --sub-title-16-medium-font-weight: 500;
+    --sub-title-16-medium-font-style: normal;
+    --sub-title-16-regular-font-family: Pretendard-Regular, sans-serif;
+    --sub-title-16-regular-font-size: 16px;
+    --sub-title-16-regular-line-height: 140%;
+    --sub-title-16-regular-font-weight: 400;
+    --sub-title-16-regular-font-style: normal;
+    --body-16-regular-font-family: Pretendard-Regular, sans-serif;
+    --body-16-regular-font-size: 16px;
+    --body-16-regular-line-height: 150%;
+    --body-16-regular-font-weight: 400;
+    --body-16-regular-font-style: normal;
+    --body-15-semibold-font-family: Pretendard-SemiBold, sans-serif;
+    --body-15-semibold-font-size: 15px;
+    --body-15-semibold-line-height: 150%;
+    --body-15-semibold-font-weight: 600;
+    --body-15-semibold-font-style: normal;
+    --body-15-regular-font-family: Pretendard-Regular, sans-serif;
+    --body-15-regular-font-size: 15px;
+    --body-15-regular-line-height: 160%;
+    --body-15-regular-font-weight: 400;
+    --body-15-regular-font-style: normal;
+    --body-14-medium-font-family: Pretendard-Medium, sans-serif;
+    --body-14-medium-font-size: 14px;
+    --body-14-medium-line-height: 160%;
+    --body-14-medium-font-weight: 500;
+    --body-14-medium-font-style: normal;
+    --body-14-regular-font-family: Pretendard-Regular, sans-serif;
+    --body-14-regular-font-size: 14px;
+    --body-14-regular-line-height: 150%;
+    --body-14-regular-font-weight: 400;
+    --body-14-regular-font-style: normal;
+    --body-14-semibold-font-family: Pretendard-SemiBold, sans-serif;
+    --body-14-semibold-font-size: 14px;
+    --body-14-semibold-line-height: 160%;
+    --body-14-semibold-font-weight: 600;
+    --body-14-semibold-font-style: normal;
+    --caption-13-light-font-family: Pretendard-Light, sans-serif;
+    --caption-13-light-font-size: 13px;
+    --caption-13-light-line-height: 160%;
+    --caption-13-light-font-weight: 300;
+    --caption-13-light-font-style: normal;
+    --caption-13-semibold-font-family: Pretendard-SemiBold, sans-serif;
+    --caption-13-semibold-font-size: 13px;
+    --caption-13-semibold-line-height: 160%;
+    --caption-13-semibold-font-weight: 600;
+    --caption-13-semibold-font-style: normal;
+    --caption-12-medium-font-family: Pretendard-Medium, sans-serif;
+    --caption-12-medium-font-size: 12px;
+    --caption-12-medium-line-height: 16px;
+    --caption-12-medium-font-weight: 500;
+    --caption-12-medium-font-style: normal;
+  
+    /* Effects */
+    --box-shadow-box-shadow: 0px 0px 32px 0px rgba(102, 108, 118, 0.2);
+    --box-shadow-backdrop-filter: blur(5px);
+    --glass-box-shadow: inset 0px 0px 4px 0px rgba(255, 255, 255, 0.15);
+    --glass-backdrop-filter: blur(20px);
+    --bg-blur-45-backdrop-filter: blur(22.5px);
+    --bg-blur-4-backdrop-filter: blur(2px);
+}
