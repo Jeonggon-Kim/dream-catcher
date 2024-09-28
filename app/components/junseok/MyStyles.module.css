@@ -10,6 +10,7 @@
     height: 48px;
     position: relative;
     width: 393px;
+    box-sizing: border-box;
   }
   
   .textWrapper {
@@ -80,3 +81,34 @@
     height: 100%;
     color: inherit;
   }
+
+  /* MyStyles.module.css */
+
+.bookmarkBox {
+  display: flex;
+  width: 361px;
+  padding: 16px 0px 16px 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  border-radius: 16px;
+  background: var(--white-15, rgba(241, 236, 240, 0.15));
+  box-sizing: border-box;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+.bookmarkminibox{
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  align-self: stretch;
+
+}
+.bookmarktext{
+  color: var(--white-100, #F0ECF1);
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%; /* 25.2px */
+}

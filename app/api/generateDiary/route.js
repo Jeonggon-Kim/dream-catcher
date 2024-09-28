@@ -16,7 +16,7 @@ export async function POST(request) {
       messages: [
         {
           role: "system",
-          content: "무조건 한국말로. 너는 밑의 대화 내용들을 바탕으로 꿈에 대해 요약하고 대화 내용을 요약해줘. 대화 내용은 유저가 현재의 삶과 꾼 꿈에 대해 대조하고 왜 그런 꿈을 꿨는지를 요약하는거야.",
+          content: "무조건 한국말로. 사용자와의 대화를 자연스럽게 이어가며, 꿈에 대한 깊이 있는 해석을 제공하세요.",
         },
         ...chatHistory,
       ],

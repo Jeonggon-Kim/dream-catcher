@@ -1,14 +1,31 @@
-import { MongoClient } from 'mongodb'
-const url = process.env.mongo_url
-const options = { useNewUrlParser: true }
-let connectDB
+// database.js
+import { MongoClient } from 'mongodb';
+
+const url = process.env.mongo_url;
+const options = {}; // `useNewUrlParser` 옵션 제거
+
+let client;
+let clientPromise;
+
+if (!url) {
+  throw new Error('Please add your Mongo URI to .env.local');
+}
 
 if (process.env.NODE_ENV === 'development') {
-  if (!global._mongo) {
-    global._mongo = new MongoClient(url, options).connect()
+  if (!global._mongoClientPromise) {
+    client = new MongoClient(url, options);
+    global._mongoClientPromise = client.connect();
   }
-  connectDB = global._mongo
+  clientPromise = global._mongoClientPromise;
 } else {
-  connectDB = new MongoClient(url, options).connect()
+  client = new MongoClient(url, options);
+  clientPromise = client.connect();
 }
-export { connectDB }
+
+export async function connectDB() {
+  const client = await clientPromise;
+  return client;
+}
+
+// 기본 내보내기 추가
+export default connectDB;
