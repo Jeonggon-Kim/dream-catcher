@@ -23,7 +23,19 @@ const ChatUI = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const router = useRouter(); 
+
+  // SpeechRecognition setup
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+
+  if (recognition) {
+    recognition.continuous = true;
+    recognition.lang = "ko-KR"; // 한국어 설정
+    recognition.interimResults = false; // 중간 결과를 보여줄지 여부
+    recognition.maxAlternatives = 1; // 최대 대안 단어 수
+  }
 
   const handleSend = async () => {
     if (inputValue.trim()) {
@@ -71,27 +83,45 @@ const ChatUI = () => {
     }
   };
 
+  const handleVoiceInput = () => {
+    if (!recognition) {
+      alert("Your browser does not support speech recognition.");
+      return;
+    }
+  
+    if (isRecording) {
+      recognition.stop(); // 현재 녹음 중이면 음성 인식 종료
+    } else {
+      recognition.start(); // 녹음 중이 아니면 음성 인식 시작
+    }
+  
+      setIsRecording(!isRecording);
+  };
 
+
+  recognition.onresult = (event) => {
+    const speechResult = event.results[0][0].transcript;
+    setInputValue(speechResult); // 인식된 텍스트를 inputValue에 설정
+  };
+  
   const handleEndChat = async () => {
     try {
-      // 채팅 기록을 "role"과 "content" 형식으로 변환
       const chatHistory = messages.map((msg) => ({
         role: msg.sender === "user" ? "user" : "assistant",
         content: msg.text,
       }));
   
-      // 요약본 생성 API 호출
       const response = await fetch("/api/generateDiary", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ chatHistory }), // 채팅 기록을 API에 전달
+        body: JSON.stringify({ chatHistory }),
       });
   
       if (response.ok) {
         const data = await response.json();
-        console.log("Chat Summary: " + data.summary); // 요약본을 사용자에게 알림 (필요에 따라 변경 가능)
+        console.log("Chat Summary: " + data.summary);
       } else {
         console.error("Failed to generate chat summary.");
       }
@@ -99,7 +129,6 @@ const ChatUI = () => {
       console.error("Error generating chat summary:", error);
     }
     
-    // 메인 페이지로 이동
     router.push("/"); 
   };
 
@@ -133,7 +162,6 @@ const ChatUI = () => {
 
       {/* 버튼 영역 */}
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        {/* 채팅 끝내기 버튼 */}
         <button
           onClick={handleEndChat}
           style={{
@@ -178,6 +206,22 @@ const ChatUI = () => {
           >
             {loading ? "Sending..." : "Send"}
           </button>
+
+          {/* 음성 입력 버튼 추가 */}
+          <button
+            onClick={handleVoiceInput}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: isRecording ? "#f44336" : "#2196f3", // 녹음 중일 때 빨간색, 아닐 때 파란색
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+            disabled={loading}
+          >
+            {isRecording ? "Stop 🎤" : "Start 🎤"}
+          </button>
         </div>
       </div>
     </div>
@@ -192,3 +236,7 @@ export default function Page() {
     </div>
   );
 }
+
+
+
+asdfasdfasdf
