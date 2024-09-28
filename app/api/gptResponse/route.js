@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 // import { connectDB } from "@/util/database"; // MongoDB 연결 함수 가져오기
 // import { ObjectId } from "mongodb";
-
 // OpenAI 설정
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_KEY,
@@ -11,8 +10,6 @@ const openai = new OpenAI({
 export async function POST(request) {
   try {
     const { userMessage, chatHistory } = await request.json();
-
-    console.log(chatHistory)
     // OpenAI에 보낼 메시지 구조 생성
     const messages = [
       {

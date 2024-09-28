@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { connectDB } from "@/util/database";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_KEY,
@@ -9,6 +11,15 @@ const openai = new OpenAI({
 export async function POST(request) {
   try {
     const { chatHistory } = await request.json();
+
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user || !session.user.email) {
+      return NextResponse.json(
+        { error: "User not authenticated" },
+        { status: 401 }
+      );
+    }
 
     // 채팅 기록을 바탕으로 요약 생성
     const completion = await openai.chat.completions.create({
@@ -45,7 +56,7 @@ export async function POST(request) {
     const diaryTitle = titleCompletion.choices[0].message.content.trim();
 
     // MongoDB 연결
-    const client = await connectDB;
+    const client = await connectDB();
     const db = client.db("dream-catcher");
     const diaryCollection = db.collection("diary");
 
@@ -55,6 +66,7 @@ export async function POST(request) {
       content: diarySummary,
       created_at: new Date(),
       is_bookmark: false,
+      user_email: session.user.email, 
     });
     
     // 새로 생성된 diary 문서의 _id를 저장
