@@ -1,114 +1,114 @@
 /* MyStyles.module.css */
 .TopBar {
-    -webkit-backdrop-filter: blur(45px) brightness(100%);
-    backdrop-filter: blur(45px) brightness(100%);
-    background-color: rgba(0, 0, 0, 0.1); /* 살짝 불투명하게 */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    height: 48px;
-    position: relative;
-    width: 393px;
-    box-sizing: border-box;
-  }
-  
-  .textWrapper {
-    color: var(--white-100);
-    font-family: "Pretendard-SemiBold", Helvetica;
-    font-size: 22px;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: 22px;
-    position: relative;
-    white-space: nowrap;
-    width: fit-content;
-  }
-  
-  .fluentPerson {
-    height: 28px;
-    margin-bottom: -2px;
-    margin-top: -2px;
-    position: relative;
-    width: 28px;
-  }
-  
-  
-  
+  -webkit-backdrop-filter: blur(45px) brightness(100%);
+  backdrop-filter: blur(45px) brightness(100%);
+  background-color: rgba(0, 0, 0, 0.1); /* 살짝 불투명하게 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  height: 48px;
+  position: relative;
+  width: 393px;
+  box-sizing: border-box;
+}
+
+.textWrapper {
+  color: var(--white-100);
+  font-family: "Pretendard-SemiBold", Helvetica;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 22px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.fluentPerson {
+  height: 28px;
+  margin-bottom: -2px;
+  margin-top: -2px;
+  position: relative;
+  width: 28px;
+}
+
+
+
 
 .Button1 {
-    display: inline-flex;
-    height: 32px;
-    padding: 4px 12px 4px 8px;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0px 0px 10px 0px rgba(102, 108, 118, 0.10);
-  }
+  display: inline-flex;
+  height: 32px;
+  padding: 4px 12px 4px 8px;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0px 0px 10px 0px rgba(102, 108, 118, 0.10);
+}
 
-  .button2 {
-    width: 0px;
-    height: 6px;
-    border: none;
-    background: none;
-  }
-  
-  .button2 svg path {
-    stroke-width: 2px;
-    stroke: var(--white-100, #F0ECF1);
-  }
-  
-  .textField1 {
-    display: flex;
-    width: 364px;
-    height: 48px;
-    padding: 0px 16px;
-    align-items: center;
-    gap: 16px;
-    flex-shrink: 0;
-    
-    border-radius: 12px;
-    background: var(--white-5, rgba(241, 236, 240, 0.05));
-  }
-  
-  .textInput {
-    border: none;
-    background: none;
-    outline: none;
-    width: 100%;
-    height: 100%;
-    color: inherit;
-  }
+.button2 {
+  width: 0px;
+  height: 6px;
+  border: none;
+  background: none;
+}
 
-  /* MyStyles.module.css */
+.button2 svg path {
+  stroke-width: 2px;
+  stroke: var(--white-100, #F0ECF1);
+}
+
+.textField1 {
+  display: flex;
+  width: 364px;
+  height: 48px;
+  padding: 0px 16px;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  
+  border-radius: 12px;
+  background: var(--white-5, rgba(241, 236, 240, 0.05));
+}
+
+.textInput {
+  border: none;
+  background: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+}
+
+/* MyStyles.module.css */
 
 .bookmarkBox {
-  display: flex;
-  width: 361px;
-  padding: 16px 0px 16px 12px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  border-radius: 16px;
-  background: var(--white-15, rgba(241, 236, 240, 0.15));
-  box-sizing: border-box;
-  margin-left: 16px;
-  margin-right: 16px;
+display: flex;
+width: 361px;
+padding: 16px 0px 16px 12px;
+flex-direction: column;
+align-items: flex-start;
+gap: 12px;
+border-radius: 16px;
+background: var(--white-15, rgba(241, 236, 240, 0.15));
+box-sizing: border-box;
+margin-left: 16px;
+margin-right: 16px;
 }
 .bookmarkminibox{
-  display: flex;
-  align-items: flex-start;
-  gap: 4px;
-  align-self: stretch;
+display: flex;
+align-items: flex-start;
+gap: 4px;
+align-self: stretch;
 
 }
 .bookmarktext{
-  color: var(--white-100, #F0ECF1);
-  font-family: Pretendard;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 140%; /* 25.2px */
+color: var(--white-100, #F0ECF1);
+font-family: Pretendard;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 140%; /* 25.2px */
 }

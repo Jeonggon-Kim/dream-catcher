@@ -12,8 +12,7 @@ export default async function Home() {
 
   return (
     <>
-      
-
+    
       <div style={{ width: "100%", backgroundColor: "black" }} className="list-bg">
         {/* MyComponents 객체를 통해 모든 컴포넌트를 참조하여 사용 */}
       <MyComponents.TopBar leftContent={leftContent} rightContent={rightContent} />
