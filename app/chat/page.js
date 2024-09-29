@@ -118,6 +118,9 @@ const ChatUI = () => {
         },
         body: JSON.stringify({ chatHistory }),
       });
+
+      console.log('2')
+      console.log(response)
   
       if (response.ok) {
         const data = await response.json();
