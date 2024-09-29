@@ -102,3 +102,65 @@ export function BookmarkText({ children }) {
     </div>
   );
 }
+
+export function FluentSparkle() {
+  return (
+    <Image src="/images/fluent_sparkle-28-filled.svg" alt="My image" width={24} height={24}  />
+  );
+}
+
+export function DreamcardBox({ children, style }) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '12px',
+        overflowX: 'auto', // 슬라이드 가능하도록 설정
+        padding: '0px 0px',
+        ...style, // 외부에서 전달된 스타일 병합
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function Dreamcard1() {
+  return (
+    <div style={{ flexShrink: 0, borderRadius: '12px' }}>
+      <Image 
+        src="/images/bookmark-dreamcard1.png" 
+        alt="Dream card 1" 
+        width={180} 
+        height={113} 
+        style={{ objectFit: 'cover', borderRadius: '12px' }}
+      />
+    </div>
+  );
+}
+
+export function Dreamcard2() {
+  return (
+    <div style={{ flexShrink: 0, borderRadius: '12px' }}>
+      <Image 
+        src="/images/bookmark-dreamcard2.png" 
+        alt="Dream card 2" 
+        width={180} 
+        height={113}
+        style={{ objectFit: 'cover', borderRadius: '12px' }} 
+      />
+    </div>
+  );
+}
+
+
+export function AlignContainer({ left, right }) {
+  return (
+    <div className={styles.alignContainer}>
+      <div className={styles.textleft}>{left}</div>
+      <div className={styles.alignboxright}>{right}</div>
+    </div>
+  );
+}
+

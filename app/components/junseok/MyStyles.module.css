@@ -85,18 +85,21 @@
 /* MyStyles.module.css */
 
 .bookmarkBox {
-display: flex;
-width: 361px;
-padding: 16px 0px 16px 12px;
-flex-direction: column;
-align-items: flex-start;
-gap: 12px;
-border-radius: 16px;
-background: var(--white-15, rgba(241, 236, 240, 0.15));
-box-sizing: border-box;
-margin-left: 16px;
-margin-right: 16px;
+  display: flex;
+  width: 361px;
+  padding: 16px 0px 16px 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  border-radius: 16px;
+  background: var(--white-15, rgba(241, 236, 240, 0.15));
+  box-sizing: border-box;
+  margin-left: 16px;
+  margin-right: 16px;
+  overflow: hidden; /* 속성 값에서 작은 따옴표 제거 */
+  position: relative; /* 속성 값에서 작은 따옴표 제거 */
 }
+
 .bookmarkminibox{
 display: flex;
 align-items: flex-start;
@@ -111,4 +114,27 @@ font-size: 18px;
 font-style: normal;
 font-weight: 600;
 line-height: 140%; /* 25.2px */
+}
+
+.alignContainer{
+  display: inline-flex;
+  padding: 0px 0px 0px 0px;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.textleft{
+  color: var(--white-100, #F0ECF1);
+  font-family: "Pretendard-SemiBold", Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%; /* 25.2px */
+}
+
+.alignboxright{
+  display: flex;
+  margin-left:267;
 }
