@@ -22,3 +22,14 @@ body {
     color: grey;
     margin : 5px 0px;
   } 
+/* 음성으로 기록*/
+.MicText {
+  color: var(--white-80, rgba(240, 236, 241, 0.80));
+  text-align: center;
+  font-feature-settings: 'calt' off;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%; /* 22.4px */
+} 
