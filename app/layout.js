@@ -23,7 +23,8 @@ export default function RootLayout({ children }) {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`} style={{ maxWidth: "393px", margin: "0 auto", border: "1px solid" }}>
+      <body className={`${geistSans.variable} ${geistMono.variable}`} 
+      style={{ padding:"0px", margin:"0px", maxWidth: "400px", height:"1vh", minHeight: "100vh", margin: "0 auto", border: "1px solid" }}>
         {children}
       </body>
     </html>

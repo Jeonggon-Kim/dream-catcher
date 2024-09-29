@@ -2,7 +2,7 @@ import { connectDB } from "@/util/database";
 import { MongoClient, ObjectId } from "mongodb";
 
 export default async function Home(props) {
-  const client = await connectDB;
+  const client = await connectDB();
   const db = client.db("dream-catcher");
 
   // 1. 해당 diary 문서 가져오기
