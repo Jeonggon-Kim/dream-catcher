@@ -35,9 +35,12 @@ export default async function Home() {
   // Fetch only diaries belonging to the logged-in user
   let result = await db.collection('diary').find({ user_email: session.user.email }).toArray();
 
-  const leftContent = "꿈 보관함";
+  const leftContent = <span style={{ color: "#F0ECF1" }}>꿈 보관함</span>;
   const rightContent = <MyComponents.FluentPerson />;
 
+  const left = <div>전체</div>
+  const right = <MyComponents.Dropdown style={{marginLeft: "275px"}}/>
+  
   return (
     <>
       <LogoutBtn/>     
@@ -45,29 +48,35 @@ export default async function Home() {
         {/* Using MyComponents to reference all components */}
         <MyComponents.TopBar leftContent={leftContent} rightContent={rightContent} />
         <MyComponents.BookmarkBox>
-          <MyComponents.BookmarkMiniBox>
-            <MyComponents.BookmarkText>북마크</MyComponents.BookmarkText>
+        <MyComponents.BookmarkMiniBox style={{ display: 'flex', alignItems: 'center' }}>
+            <MyComponents.FluentSparkle />
+            <MyComponents.BookmarkText style={{ marginLeft: '8px' }}>북마크</MyComponents.BookmarkText>
           </MyComponents.BookmarkMiniBox>
+
+          <MyComponents.DreamcardBox >
+          {/* BookmarkMiniBox 바깥에 Dreamcard 요소들 배치 */}
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '12px'}}>
+            <MyComponents.Dreamcard1 style={{ flexShrink: 0, width: '180px', height: '113px', borderRadius: '12px' }} />
+            <MyComponents.Dreamcard2 style={{ flexShrink: 0, width: '180px', height: '113px', borderRadius: '12px' }} />
+          </div>
+          </MyComponents.DreamcardBox>
         </MyComponents.BookmarkBox>
-        {result.length > 0 ? (
-          result.map((a, i) => (
-            <div className="list-item" key={i} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
-              {/* Image placed on the left */}
-              <img src={`/images/${a._id}.webp`} alt="Diary Icon" style={{ width: "70px", height: "70px" }} />
-              
-              {/* Wrap title and date in a container */}
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                {/* Title next to the image */}
-                <a href={`chat/${a._id}`} style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "5px" }}>{a.title}</a>
-                {/* Date below both the image and title */}
-                <p style={{ margin: 0, color: "gray" }}>{new Date(a.created_at).toLocaleString()}</p>
-              </div>
-            </div>
+        <MyComponents.AlignContainer
+          left={left}
+          right={right}
+          style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }} /> 
+
+         {/* DiaryListItem 컴포넌트를 사용하여 일기 데이터 렌더링 */}
+         {result.length > 0 ? (
+          result.map((diary, index) => (
+            <MyComponents.DiaryListItem key={index} diary={diary} />
           ))
         ) : (
           <p>No diaries found for the current user.</p>
         )}
-        <a href={`/chat`}>꿈 기록하러 가기</a>
+        <div style={{ display: 'flex', margin: '317px 47px' }}>
+          <MyComponents.FloatingButton />
+        </div>
       </div>
     </>
   );

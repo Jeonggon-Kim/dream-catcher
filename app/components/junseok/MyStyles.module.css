@@ -117,24 +117,229 @@ line-height: 140%; /* 25.2px */
 }
 
 .alignContainer{
-  display: inline-flex;
+  display: flex;
   padding: 0px 0px 0px 0px;
   flex-direction: row;
   align-items: center;
+  margin-top:22px;
   margin-left: 16px;
   margin-right: 16px;
 }
 
-.textleft{
+.textleft {
   color: var(--white-100, #F0ECF1);
   font-family: "Pretendard-SemiBold", Helvetica;
   font-size: 18px;
   font-style: normal;
   font-weight: 600;
   line-height: 140%; /* 25.2px */
+  white-space: nowrap; /* 추가 */
 }
 
-.alignboxright{
+.alignrightContainer {
   display: flex;
-  margin-left:267;
+  padding: 2px 0px 2px 8px;
+  justify-content: flex-end;
+  align-items: flex-start;
+  white-space: nowrap; /* 추가 */
+}
+
+.alignrighttext{
+  flex-shrink:1;
+  color: var(--white-100, #F0ECF1);
+  /* Caption/13 semibold */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 160%; /* 20.8px */
+  margin-left: 275px;
+}
+
+.dreamlistbigbox{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  align-self: stretch;
+}
+.dreamlistbox{
+  display: flex;
+  width: 361px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.dreamlistcard1{
+  width: 112px;
+  height: 112px;
+  border-radius: 12px;
+  background: lightgray 50% / cover no-repeat;
+}
+
+
+/* 드롭다운 메뉴 스타일 */
+.dropdownWrapper {
+  position: relative;
+}
+
+/* 드롭다운 컨테이너 스타일 */
+.dropdownContainer {
+  position: relative; /* 드롭다운 메뉴 위치를 조정하기 위한 상대 위치 */
+  display: inline-block; /* 드롭다운 버튼을 인라인으로 표시 */
+}
+.alignminibox{
+  display: flex;
+  margin-left: 267px;
+  padding: 2px 0px 2px 8px;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+/* 드롭다운 버튼 스타일 */
+.dropdownButton {
+  display: flex;
+  background-color: #1C1C1E;
+  padding: 0px 0px;
+  align-items: center;
+  cursor: pointer;
+  justify-content: flex-start; /* 텍스트와 아이콘 간격 조절 */ /* 버튼 너비 */
+  white-space: nowrap; /* 줄바꿈 방지 */
+  color: var(--white-100, #F0ECF1);
+  /* Caption/13 semibold */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 160%; /* 20.8px */
+}
+
+/* 드롭다운 아이템 스타일 */
+.dropdownItem {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #1C1C1E;
+  color: #F0ECF1;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.dropdownMenu {
+  position: absolute;
+  top: 100%; /* 버튼 아래에 위치하도록 설정 */
+  left: 0;
+  background-color: #2C2C2E;
+  border-radius: 8px;
+  width: 150px; /* 드롭다운 너비 */
+  z-index: 10; /* 드롭다운 메뉴가 다른 요소 위에 표시되도록 설정 */
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* 드롭다운 메뉴 그림자 */
+}
+
+/* 드롭다운 아이템에 마우스를 올렸을 때 스타일 */
+.dropdownItem:hover {
+  background-color: #1C1C1E;
+}
+
+/* 화살표 방향 스타일 */
+.arrowDown {
+  transform: rotate(0deg); /* 기본 아래쪽 화살표 */
+  transition: transform 0.3s;
+}
+
+.arrowUp {
+  transform: rotate(180deg); /* 위쪽 화살표 */
+  transition: transform 0.3s;
+}
+
+.dropdowntext{
+  color: var(--white-100, #F0ECF1);
+  /* Caption/13 semibold */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 160%; /* 20.8px */
+}
+
+.diaryBigbox {
+  display: flex;
+  align-items: flex-start; /* 이미지와 텍스트 박스를 수직 정렬 */
+  position: relative;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.diaryTitle {
+  color: var(--white-100, #F0ECF1);
+  font-feature-settings: 'calt' off;
+  /* Sub Title/16 medium */
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 24px */
+  margin-bottom: 5px; /* 기존 코드의 마진 값을 CSS에 포함 */
+  white-space: nowrap;
+
+}
+.diaryDate{
+  color: var(--wireframe-3, #ADADAD);
+  font-feature-settings: 'calt' off;
+  /* Caption/13 light */
+  font-family: Pretendard;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 160%; /* 20.8px */
+}
+/* 북마크 아이콘 스타일 */
+.bookmarkIcon {
+  width: 16px; /* 아이콘 너비 */
+  height: 20px; /* 아이콘 높이 */
+  align-items: center;
+}
+
+/* 북마크 버튼을 포함하는 컨테이너 */
+.diarybookmarkbox {
+  margin-left: auto; /* 왼쪽 여백을 자동으로 설정하여, 요소가 오른쪽 끝에 고정되도록 설정 */
+  display: flex;
+  align-items: top; 
+  padding: 6px 4px 2px 4px;
+}
+
+.titleBox {
+  display: flex;
+  flex-direction: column; /* 제목과 날짜를 수직으로 배치 */
+  justify-content: center; /* 제목과 날짜를 수직 중앙 정렬 */
+}
+/* 제목과 북마크를 포함하는 컨테이너 */
+.diaryContentContainer {
+  display: flex;
+  flex-direction: row; /* 제목과 날짜를 수직 정렬 */
+  justify-content: flex-start; /* 제목과 날짜가 위쪽에 위치하도록 설정 */
+  flex: 1; /* 남은 공간을 전체적으로 채움 */
+  position: relative; /* 자식 요소의 절대 위치를 제어하기 위한 부모 position 설정 */
+  gap: 12px;
+}
+
+/* 플로팅 버튼 스타일 */
+.floatingButton {
+  width: 60px; /* 버튼 너비 */
+  height: 60px; /* 버튼 높이 */
+  border-radius: 50%; /* 버튼을 원형으로 설정 */
+  cursor: pointer; /* 마우스를 올렸을 때 커서 모양 변경 */
+  z-index: 1000; /* 다른 요소보다 위에 표시되도록 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 99px;
+  background: var(--white-100, #F0ECF1);
+  position: fixed;
+  bottom: 47px;
+  left:317px;
+  top:745px;
+  right:16px;
+}
+/* 플로팅 버튼 이미지 스타일 */
+.floatingButtonimg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* 이미지도 원형으로 설정 */
 }
