@@ -34,7 +34,6 @@ export async function POST(request) {
           5. 질문에 대한 충분한 답변을 받은 후, 종합적인 꿈 해석과 현실 생활과의 연관성을 설명해주세요.
         `,
       },
-    
     ...chatHistory,
       { role: "user", content: userMessage },
     ];
@@ -48,9 +47,9 @@ export async function POST(request) {
     const botResponse = completion.choices[0].message.content;
 
     // MongoDB 연결
-    // const client = await connectDB;
+    // const client = await connect);DB;
     // const db = client.db("dream-catcher"); // 데이터베이스 이름
-    // const chatCollection = db.collection("chat"); // 컬렉션 이름
+    // const chatCollection = db.collection("chat" // 컬렉션 이름
     // // MongoDB에 새로운 채팅 기록 추가
     // await chatCollection.insertOne({
     //   user: userMessage,
