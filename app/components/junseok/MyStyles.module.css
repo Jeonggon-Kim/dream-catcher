@@ -1,4 +1,32 @@
 /* MyStyles.module.css */
+/* 메인 콘텐츠 영역 스타일 */
+.mainContainer {
+  position: relative; /* 자식 요소의 위치 기준 설정 */
+  height: 852px; /* 메인 영역 높이 */
+  width: 393px; /* 메인 영역 너비 */
+  margin: 0 auto; /* 가운데 정렬 */
+  overflow: hidden; /* 배경이 컨테이너 밖으로 넘치지 않도록 설정 */
+}
+
+/* ::before 가상 요소로 배경을 설정 */
+.mainContainer::before {
+  content: "";
+  position: absolute; /* 메인 영역 전체를 덮도록 설정 */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, #1F1345 0%, #090909 49.99%); /* 그라데이션 배경 */
+  z-index: 0; /* 배경을 가장 아래 레이어에 위치 */
+  border-radius: 16px; /* 외곽을 둥글게 설정 */
+}
+
+/* 메인 콘텐츠가 배경보다 위에 위치하도록 설정 */
+.mainContent {
+  position: relative; /* 배경보다 위에 위치하도록 설정 */
+  z-index: 1; /* z-index 값을 1로 설정해 배경보다 위에 있도록 함 */
+}
+
 .TopBar {
   -webkit-backdrop-filter: blur(45px) brightness(100%);
   backdrop-filter: blur(45px) brightness(100%);
@@ -264,6 +292,7 @@ line-height: 140%; /* 25.2px */
   position: relative;
   gap: 10px;
   margin-bottom: 10px;
+  padding : 16px;
 }
 
 .diaryTitle {
@@ -331,12 +360,11 @@ line-height: 140%; /* 25.2px */
   align-items: center;
   border-radius: 99px;
   background: var(--white-100, #F0ECF1);
-  position: fixed;
-  bottom: 47px;
-  left:317px;
-  top:745px;
-  right:16px;
+  position: absolute; /* 메인 영역 안에서 절대 위치 */
+  bottom: 16px; /* 메인 영역의 하단 기준으로 배치 */
+  right: 16px; /* 메인 영역의 오른쪽 기준으로 배치 */
 }
+
 /* 플로팅 버튼 이미지 스타일 */
 .floatingButtonimg {
   width: 100%;

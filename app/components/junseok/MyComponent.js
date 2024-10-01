@@ -11,6 +11,8 @@ const iconMap = {
  
 
 
+
+
 export function TopBar({ leftContent, rightContent }) {
   return (
     <div className={styles.TopBar}>
@@ -226,7 +228,7 @@ export function DiaryListItem({ diary }) {
     setIsBookmarked(!isBookmarked); // 클릭할 때마다 북마크 상태 변경
   };
   return (
-    <div className="diaryBigbox" style={{ display: "flex", alignItems: "start", gap: "16px", marginBottom: "10px" }}>
+    <div className="diaryBigbox" style={{ display: "flex", alignItems: "start", gap: "16px", marginBottom: "12px",marginLeft:"16px",marginRight:"16px" }}>
       {/* 이미지 */}
       <img src={`/images/${diary._id}.webp`} alt="Diary Icon" style={{ width: "112px", height: "112px",borderRadius: "12px" }} />
       {/* Image placed on the left */}
@@ -241,7 +243,7 @@ export function DiaryListItem({ diary }) {
       {/* 북마크 버튼을 포함하는 diarybookmarkbox */}
       <div className={styles.diarybookmarkbox}>
             <img
-              src={isBookmarked ? "/images/bookmark_white.svg" : "/images/bookmark_gray.svg"}
+              src={isBookmarked ? "/images/bookmark_gray.svg" : "/images/bookmark_white.svg"}
               alt="Bookmark Icon"
               className={styles.bookmarkIcon}
               onClick={handleBookmarkClick}
@@ -260,3 +262,59 @@ export function DiaryListItem({ diary }) {
       </a>
     );
   }
+
+
+  // MainContainer 컴포넌트 정의
+export function MainContainer({ children }) {
+  return (
+    <div className={styles.mainContainer}>
+      {children} {/* MainContainer 안에 자식 요소를 렌더링 */}
+    </div>
+  );
+}
+
+
+// MainContent 컴포넌트 정의
+export function MainContent({ result }) {
+  const leftContent = <span style={{ color: "#F0ECF1" }}>꿈 보관함</span>;
+  const rightContent = <FluentPerson />;
+
+  const left = <div>전체</div>;
+  const right = <Dropdown style={{ marginLeft: "275px" }} />;
+
+  return (
+    <div className={styles.mainContent}>
+      <TopBar leftContent={leftContent} rightContent={rightContent} />
+      <BookmarkBox>
+        <BookmarkMiniBox style={{ display: 'flex', alignItems: 'center' }}>
+          <FluentSparkle />
+          <BookmarkText style={{ marginLeft: '8px' }}>북마크</BookmarkText>
+        </BookmarkMiniBox>
+
+        <DreamcardBox>
+          {/* BookmarkMiniBox 바깥에 Dreamcard 요소들 배치 */}
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
+            <Dreamcard1 style={{ flexShrink: 0, width: '180px', height: '113px', borderRadius: '12px' }} />
+            <Dreamcard2 style={{ flexShrink: 0, width: '180px', height: '113px', borderRadius: '12px' }} />
+          </div>
+        </DreamcardBox>
+      </BookmarkBox>
+
+      <AlignContainer
+        left={left}
+        right={right}
+        style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }} /> 
+
+      {/* DiaryListItem을 스크롤 가능하도록 설정 */}
+      <div style={{ height: '500px', overflow: 'auto' }}>
+        {result.length > 0 ? (
+          result.map((diary, index) => (
+            <DiaryListItem key={index} diary={diary} />
+          ))
+        ) : (
+          <p>No diaries found for the current user.</p>
+        )}
+      </div>
+    </div>
+  );
+}
