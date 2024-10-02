@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './MyStyles.module.css';
 import Image from "next/image";
+import Slider from "react-slick"; 
 
 const iconMap = {
   fluentPerson: '/images/fluent_person-16-regular.svg',
@@ -90,23 +91,36 @@ export function FluentSparkle() {
   );
 }
 
+
 export function DreamcardBox({ children, style }) {
+  // react-slick 슬라이더 설정 객체
+  const settings = {
+    dots: false, // 하단의 점 네비게이션 비활성화
+    infinite: true, // 무한 루프 슬라이드 비활성화
+    speed: 500, // 슬라이드 전환 속도
+    slidesToShow: 2, // 한 번에 보여줄 슬라이드 수
+    slidesToScroll: 1, // 한 번에 넘어갈 슬라이드 수
+    arrows: true, // 좌우 화살표 버튼 표시 여부
+    vertical: false, // 가로 슬라이드 방향 설정
+    adaptiveHeight: false, // 높이 자동 조정 비활성화
+    centerMode: false, // 슬라이드를 중앙에 정렬하지 않음
+    swipeToSlide: true, // 슬라이드를 터치로 넘길 수 있게 설정
+    className: `${styles.sliderWrapper} ${styles.customSlickContainer}`, // sliderWrapper 클래스 적용
+  };
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        gap: '12px',
-        overflowX: 'auto', // 슬라이드 가능하도록 설정
-        padding: '0px 0px',
-        ...style, // 외부에서 전달된 스타일 병합
-      }}
-    >
-      {children}
+    <div className={styles.sliderWrapper} style={{ ...style }}>
+      <Slider {...settings}>
+        <div className={styles.slickSlide}>
+          <Dreamcard1 />
+        </div>
+        <div className={styles.slickSlide}>
+          <Dreamcard2 />
+        </div>
+      </Slider>
     </div>
   );
 }
-
 export function Dreamcard1() {
   return (
     <div style={{ flexShrink: 0, borderRadius: '12px' }}>
@@ -167,57 +181,53 @@ export function Dreamlistbox({ children }) {
 }
 
 
-export function Dropdown() {
-  const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태 관리
-  const [selected, setSelected] = useState('최신순'); // 선택된 드롭다운 옵션 관리
+// Dropdown 컴포넌트
+export function Dropdown({ selected, onSelect }) {
+  const [isOpen, setIsOpen] = useState(false);
 
-  // 드롭다운 버튼 클릭 시 상태를 토글하는 함수
+  // 드롭다운 열림/닫힘 상태를 토글하는 함수
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  // 드롭다운 옵션 선택 시 상태를 변경하는 함수
-  const selectOption = (option) => {
-    setSelected(option); // 선택된 옵션 업데이트
-    setIsOpen(false); // 드롭다운 닫기
-  };
+  // 드롭다운에 표시할 옵션들
+  const options = ['최신순', '등록순'];
 
   return (
     <div className={styles.dropdownWrapper} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', position: 'relative' }}>
       {/* 드롭다운 버튼 */}
-      <button onClick={toggleDropdown} className={styles.dropdownButton}>
+      <button onClick={toggleDropdown} className={styles.dropdownButton} style={{ backgroundColor: 'transparent', border: 'none' }}>
         {selected} {/* 선택된 옵션 표시 */}
         <Image
-          src="/images/arrow_drop_down.svg" // 드롭다운 화살표 이미지
+          src="/images/arrow_drop_down.svg"
           alt="Dropdown Arrow"
           width={20}
           height={20}
-          className={isOpen ? styles.arrowUp : styles.arrowDown} // 상태에 따라 스타일 변경
+          className={isOpen ? styles.arrowUp : styles.arrowDown}
         />
       </button>
 
-      {/* 드롭다운 메뉴 */}
+      {/* 드롭다운 메뉴: 선택된 옵션을 제외한 다른 옵션만 표시 */}
       {isOpen && (
         <div className={styles.dropdownMenu}>
-          <div
-            className={styles.dropdowntext}
-            onClick={() => selectOption('최신순')}
-            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }} // 최신순 텍스트 스타일 적용
-          >
-            최신순
-          </div>
-          <div
-            className={styles.dropdowntext}
-            onClick={() => selectOption('날짜순')}
-            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}
-          >
-            날짜순
-          </div>
+          {options
+            .filter(option => option !== selected) // 선택된 옵션 제외 필터링
+            .map(option => (
+              <div
+                key={option}
+                className={styles.dropdownItem}
+                onClick={() => { onSelect(option); setIsOpen(false); }} // 선택된 옵션 업데이트
+                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}
+              >
+                {option} {/* 선택된 옵션 제외한 옵션만 표시 */}
+              </div>
+            ))}
         </div>
       )}
     </div>
   );
-};
+}
+
 
 export function DiaryListItem({ diary }) {
   // 북마크 상태를 관리하는 state
@@ -276,11 +286,45 @@ export function MainContainer({ children }) {
 
 // MainContent 컴포넌트 정의
 export function MainContent({ result }) {
+  const [selectedSort, setSelectedSort] = useState(''); // 초기값을 빈 문자열로 설정하여 로딩 상태를 반영
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+
+  // 페이지가 처음 렌더링될 때 localStorage에서 저장된 정렬 기준을 가져옴
+  useEffect(() => {
+    const savedSort = localStorage.getItem('selectedSort');
+    if (savedSort) {
+      setSelectedSort(savedSort); // 저장된 정렬 기준이 있으면 상태 업데이트
+    } else {
+      setSelectedSort('최신순'); // 저장된 정렬 기준이 없으면 기본값으로 설정
+    }
+    setIsLoading(false); // 로딩 상태 해제
+  }, []);
+
+  // 사용자가 정렬 기준을 변경할 때 localStorage에 저장
+  const handleSortChange = (option) => {
+    setSelectedSort(option); // 선택된 정렬 기준 업데이트
+    localStorage.setItem('selectedSort', option); // localStorage에 저장
+  };
+
+  // 선택된 정렬 기준에 따라 result를 정렬
+  const sortedResult = [...result].sort((a, b) => {
+    if (selectedSort === '최신순') {
+      return new Date(b.created_at) - new Date(a.created_at); // 최신순 정렬
+    } else {
+      return new Date(a.created_at) - new Date(b.created_at); // 등록순 정렬
+    }
+  });
+
   const leftContent = <span style={{ color: "#F0ECF1" }}>꿈 보관함</span>;
   const rightContent = <FluentPerson />;
 
   const left = <div>전체</div>;
-  const right = <Dropdown style={{ marginLeft: "275px" }} />;
+  const right = <Dropdown selected={selectedSort} onSelect={handleSortChange} style={{ marginLeft: "275px" }} />;
+
+  // 로딩 중일 때는 아무것도 렌더링하지 않도록 설정
+  if (isLoading) {
+    return null; // 로딩 상태일 때는 아무것도 렌더링하지 않음
+  }
 
   return (
     <div className={styles.mainContent}>
@@ -292,7 +336,6 @@ export function MainContent({ result }) {
         </BookmarkMiniBox>
 
         <DreamcardBox>
-          {/* BookmarkMiniBox 바깥에 Dreamcard 요소들 배치 */}
           <div style={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
             <Dreamcard1 style={{ flexShrink: 0, width: '180px', height: '113px', borderRadius: '12px' }} />
             <Dreamcard2 style={{ flexShrink: 0, width: '180px', height: '113px', borderRadius: '12px' }} />
@@ -303,12 +346,13 @@ export function MainContent({ result }) {
       <AlignContainer
         left={left}
         right={right}
-        style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }} /> 
+        style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}
+      />
 
       {/* DiaryListItem을 스크롤 가능하도록 설정 */}
       <div style={{ height: '500px', overflow: 'auto' }}>
-        {result.length > 0 ? (
-          result.map((diary, index) => (
+        {sortedResult.length > 0 ? (
+          sortedResult.map((diary, index) => (
             <DiaryListItem key={index} diary={diary} />
           ))
         ) : (

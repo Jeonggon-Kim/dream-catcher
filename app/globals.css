@@ -32,3 +32,7 @@ body {
   font-weight: 500;
   line-height: 160%; /* 22.4px */
 } 
+
+/* styles/globals.css */
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
