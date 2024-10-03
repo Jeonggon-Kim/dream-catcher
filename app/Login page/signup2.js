@@ -3,22 +3,18 @@
 import { useRouter } from 'next/navigation'; // Router hook for navigation
 import '../Login page/signup2.css'; // Import the CSS file for styling
 
-export default function Home() {
-  const router = useRouter(); // Initialize the Next.js router
+export default function SignUpPage() {
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Collect form data
     const formData = {
-      occupation: event.target.occupation.value
+      occupation: event.target.occupation.value,
     };
 
-    console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-    console.log(formData)
     try {
-      // Send a POST request to the API route
-      const response = await fetch('/api/submitForm2', {
+      const response = await fetch('/api/submitForm', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,15 +23,12 @@ export default function Home() {
       });
 
       if (response.ok) {
-        // Handle a successful response
         const result = await response.json();
         console.log(result);
-        console.log('asdfasdfasdfasdfasdf')
 
-        // Redirect to a new page, e.g., '/thank-you' or any other page
-        window.location.href = "/";
+        // Redirect to the next page
+        window.location.href = "/sign_up2";
       } else {
-        // Handle error response
         console.error("Form submission failed:", response.statusText);
       }
     } catch (error) {
@@ -84,8 +77,9 @@ export default function Home() {
                 <label htmlFor="others" className="description2">기타</label>
               </div>
             </div>
+
             <div className="button">
-              <button type="submit" className="description2">계속하기</button>
+              <button type="submit" className="description2">시작하기</button>
             </div>
           </form>
 
