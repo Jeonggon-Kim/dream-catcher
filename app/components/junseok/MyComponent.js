@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './MyStyles.module.css';
 import Image from "next/image";
 import Slider from "react-slick"; 
+import axios from 'axios'; // API 요청을 위해 axios를 사용
 
 const iconMap = {
   fluentPerson: '/images/fluent_person-16-regular.svg',
@@ -91,36 +92,43 @@ export function FluentSparkle() {
   );
 }
 
+export function DreamcardBox({ result = [] }) {
+  const bookmarkedDiaries = result.filter(diary => diary.is_bookmark);
 
-export function DreamcardBox({ children, style }) {
-  // react-slick 슬라이더 설정 객체
   const settings = {
-    dots: false, // 하단의 점 네비게이션 비활성화
-    infinite: true, // 무한 루프 슬라이드 비활성화
-    speed: 500, // 슬라이드 전환 속도
-    slidesToShow: 2, // 한 번에 보여줄 슬라이드 수
-    slidesToScroll: 1, // 한 번에 넘어갈 슬라이드 수
-    arrows: true, // 좌우 화살표 버튼 표시 여부
-    vertical: false, // 가로 슬라이드 방향 설정
-    adaptiveHeight: false, // 높이 자동 조정 비활성화
-    centerMode: false, // 슬라이드를 중앙에 정렬하지 않음
-    swipeToSlide: true, // 슬라이드를 터치로 넘길 수 있게 설정
-    className: `${styles.sliderWrapper} ${styles.customSlickContainer}`, // sliderWrapper 클래스 적용
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: bookmarkedDiaries.length < 2 ? 1 : 2, // 슬라이드 개수 조정
+    slidesToScroll: 1,
+    arrows: true,
+    vertical: false,
+    adaptiveHeight: true,
+    swipeToSlide: true,
+    className: `${styles.sliderWrapper} ${styles.customSlickContainer}`, // customSlickContainer 스타일 적용
   };
 
   return (
-    <div className={styles.sliderWrapper} style={{ ...style }}>
+    <div className={styles.sliderWrapper}>
       <Slider {...settings}>
-        <div className={styles.slickSlide}>
-          <Dreamcard1 />
-        </div>
-        <div className={styles.slickSlide}>
-          <Dreamcard2 />
-        </div>
+        {bookmarkedDiaries.map((diary, index) => (
+          <div className={styles.slickSlide} key={diary._id}>
+            <a href={`chat/${diary._id}`} className={styles.diaryTitle}>
+            <Image
+              src={`/images/${diary._id}.webp`}
+              alt="Bookmarked Dream"
+              width={180}
+              height={113}
+              style={{ objectFit: 'cover', borderRadius: '12px' }}
+            />
+            </a>
+          </div>
+        ))}
       </Slider>
     </div>
   );
 }
+
 export function Dreamcard1() {
   return (
     <div style={{ flexShrink: 0, borderRadius: '12px' }}>
@@ -229,41 +237,61 @@ export function Dropdown({ selected, onSelect }) {
 }
 
 
-export function DiaryListItem({ diary }) {
-  // 북마크 상태를 관리하는 state
-  const [isBookmarked, setIsBookmarked] = useState(false);
+export function DiaryListItem({ diary, onBookmarkUpdate }) {
+  const [isBookmarked, setIsBookmarked] = useState(diary.is_bookmark);
 
   // 북마크 버튼 클릭 이벤트 처리 함수
-  const handleBookmarkClick = () => {
-    setIsBookmarked(!isBookmarked); // 클릭할 때마다 북마크 상태 변경
+  const handleBookmarkClick = async () => {
+    try {
+      const newBookmarkState = !isBookmarked;
+
+      // UI에서 상태 즉시 반영
+      setIsBookmarked(newBookmarkState);
+
+      // DB에 업데이트 요청 보내기
+      await axios.post('/api/bookmark', {
+        diaryId: diary._id,
+        isBookmark: newBookmarkState,
+      });
+
+      // 부모 컴포넌트에 알림
+      onBookmarkUpdate(); 
+    } catch (error) {
+      console.error('Failed to update bookmark:', error);
+
+      // 오류가 발생하면 상태 롤백
+      setIsBookmarked(!newBookmarkState);
+    }
   };
+
   return (
-    <div className="diaryBigbox" style={{ display: "flex", alignItems: "start", gap: "16px", marginBottom: "12px",marginLeft:"16px",marginRight:"16px" }}>
+    <div className="diaryBigbox" style={{ display: "flex", alignItems: "start", gap: "16px", marginBottom: "12px", marginLeft:"16px",marginRight:"16px" }}>
       {/* 이미지 */}
-      <img src={`/images/${diary._id}.webp`} alt="Diary Icon" style={{ width: "112px", height: "112px",borderRadius: "12px" }} />
-      {/* Image placed on the left */}
-    {/* 이미지 옆에 전체 Flexbox를 추가 */}
-    <div className={styles.diaryContentContainer}>
+      <img src={`/images/${diary._id}.webp`} alt="Diary Icon" style={{ width: "112px", height: "112px", borderRadius: "12px" }} />
+
+      {/* 이미지 옆에 전체 Flexbox를 추가 */}
+      <div className={styles.diaryContentContainer}>
         {/* 제목과 날짜를 포함하는 TitleBox */}
         <div className={styles.titleBox}>
           <a href={`chat/${diary._id}`} className={styles.diaryTitle}>{diary.title}</a>
           <p className={styles.diaryDate}>{new Date(diary.created_at).toLocaleString()}</p>
         </div>
 
-      {/* 북마크 버튼을 포함하는 diarybookmarkbox */}
-      <div className={styles.diarybookmarkbox}>
-            <img
-              src={isBookmarked ? "/images/bookmark_gray.svg" : "/images/bookmark_white.svg"}
-              alt="Bookmark Icon"
-              className={styles.bookmarkIcon}
-              onClick={handleBookmarkClick}
-              style={{ cursor: "pointer" }}
-            />
-          </div>
+        {/* 북마크 버튼을 포함하는 diarybookmarkbox */}
+        <div className={styles.diarybookmarkbox}>
+          <img
+            // isBookmarked 상태에 따라 이미지 변경
+            src={isBookmarked ? "/images/bookmark_gray.svg" : "/images/bookmark_white.svg"}
+            alt="Bookmark Icon"
+            className={styles.bookmarkIcon}
+            onClick={handleBookmarkClick}
+            style={{ cursor: "pointer" }}
+          />
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   export  function FloatingButton() {
     return (
@@ -284,34 +312,33 @@ export function MainContainer({ children }) {
 }
 
 
-// MainContent 컴포넌트 정의
-export function MainContent({ result }) {
-  const [selectedSort, setSelectedSort] = useState(''); // 초기값을 빈 문자열로 설정하여 로딩 상태를 반영
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+export function MainContent({ initialResult }) {
+  const [result, setResult] = useState(initialResult || []); // 초기값을 서버에서 전달된 result로 설정
+  const [selectedSort, setSelectedSort] = useState('최신순');
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
-  // 페이지가 처음 렌더링될 때 localStorage에서 저장된 정렬 기준을 가져옴
-  useEffect(() => {
-    const savedSort = localStorage.getItem('selectedSort');
-    if (savedSort) {
-      setSelectedSort(savedSort); // 저장된 정렬 기준이 있으면 상태 업데이트
-    } else {
-      setSelectedSort('최신순'); // 저장된 정렬 기준이 없으면 기본값으로 설정
-    }
-    setIsLoading(false); // 로딩 상태 해제
-  }, []);
+  // 북마크 업데이트 후 데이터 다시 가져오기
+const fetchUpdatedData = async () => {
+  try {
+    const { data } = await axios.get('/api/getDiaries');
+    console.log("Fetched Diaries: ", data); // 서버에서 가져온 데이터를 확인
+    setResult(data); // result 상태를 업데이트
+  } catch (error) {
+    console.error('Failed to fetch diaries:', error);
+  }
+};
 
-  // 사용자가 정렬 기준을 변경할 때 localStorage에 저장
-  const handleSortChange = (option) => {
-    setSelectedSort(option); // 선택된 정렬 기준 업데이트
-    localStorage.setItem('selectedSort', option); // localStorage에 저장
+  // 북마크 업데이트 핸들러 (DiaryListItem 컴포넌트에서 호출)
+  const handleBookmarkUpdate = () => {
+    fetchUpdatedData(); // 데이터를 다시 가져옴
   };
 
-  // 선택된 정렬 기준에 따라 result를 정렬
+  // 정렬 기준에 따라 result를 정렬
   const sortedResult = [...result].sort((a, b) => {
     if (selectedSort === '최신순') {
-      return new Date(b.created_at) - new Date(a.created_at); // 최신순 정렬
+      return new Date(b.created_at) - new Date(a.created_at);
     } else {
-      return new Date(a.created_at) - new Date(b.created_at); // 등록순 정렬
+      return new Date(a.created_at) - new Date(b.created_at);
     }
   });
 
@@ -319,28 +346,22 @@ export function MainContent({ result }) {
   const rightContent = <FluentPerson />;
 
   const left = <div>전체</div>;
-  const right = <Dropdown selected={selectedSort} onSelect={handleSortChange} style={{ marginLeft: "275px" }} />;
+  const right = <Dropdown selected={selectedSort} onSelect={setSelectedSort} style={{ marginLeft: "275px" }} />;
 
-  // 로딩 중일 때는 아무것도 렌더링하지 않도록 설정
-  if (isLoading) {
-    return null; // 로딩 상태일 때는 아무것도 렌더링하지 않음
-  }
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className={styles.mainContent}>
       <TopBar leftContent={leftContent} rightContent={rightContent} />
+
       <BookmarkBox>
         <BookmarkMiniBox style={{ display: 'flex', alignItems: 'center' }}>
           <FluentSparkle />
           <BookmarkText style={{ marginLeft: '8px' }}>북마크</BookmarkText>
         </BookmarkMiniBox>
 
-        <DreamcardBox>
-          <div style={{ display: 'flex', flexDirection: 'row', gap: '12px' }}>
-            <Dreamcard1 style={{ flexShrink: 0, width: '180px', height: '113px', borderRadius: '12px' }} />
-            <Dreamcard2 style={{ flexShrink: 0, width: '180px', height: '113px', borderRadius: '12px' }} />
-          </div>
-        </DreamcardBox>
+        {/* DreamcardBox에 필터링된 result 전달 */}
+        <DreamcardBox result={sortedResult.filter(diary => diary.is_bookmark)} />
       </BookmarkBox>
 
       <AlignContainer
@@ -353,7 +374,7 @@ export function MainContent({ result }) {
       <div style={{ height: '500px', overflow: 'auto' }}>
         {sortedResult.length > 0 ? (
           sortedResult.map((diary, index) => (
-            <DiaryListItem key={index} diary={diary} />
+            <DiaryListItem key={index} diary={diary} onBookmarkUpdate={handleBookmarkUpdate} />
           ))
         ) : (
           <p>No diaries found for the current user.</p>

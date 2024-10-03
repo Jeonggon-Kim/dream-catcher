@@ -405,10 +405,13 @@ line-height: 140%; /* 25.2px */
 }
 .sliderWrapper {
   width: 100%; /* 부모 요소의 너비를 고정 */
-  max-width: 400px; /* 원하는 슬라이더 최대 너비 설정 */
+  max-width: 100%; /* 원하는 슬라이더 최대 너비 설정 */
   margin: 0 auto; /* 중앙 정렬 */
   position: relative; /* 자식 요소의 위치를 부모 기준으로 설정 */
+  display: flex;
+  flex-direction: row; /* 가로 배치 설정 */
 }
+
 .slickSlide {
   /* 슬라이드 요소의 크기 및 정렬 설정 */
   width: auto !important; /* 슬라이드 개별 너비를 자동으로 설정 */
@@ -419,4 +422,13 @@ line-height: 140%; /* 25.2px */
   align-items: center !important; /* 자식 요소를 수직 중앙으로 정렬 */
   flex-shrink: 0; /* 슬라이드 요소가 축소되지 않도록 설정 */
   overflow: hidden; /* 넘치는 요소가 보이지 않도록 설정 */
+  padding: 0 6px; /* 슬라이드 좌우에 6px씩 패딩을 주어 총 12px의 간격 생성 */
+}
+.customSlickContainer {
+  display: flex;
+  flex-direction: row; /* 가로 방향 슬라이드 배치 */
+  justify-content: center; /* 자식 요소를 중앙 정렬 */
+  align-items: center; /* 자식 요소 수직 중앙 정렬 */
+  overflow: hidden; /* 넘치는 요소가 보이지 않도록 설정 */
+  gap: 12px; /* 슬라이드 간격 설정 */
 }

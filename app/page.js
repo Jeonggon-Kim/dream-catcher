@@ -33,9 +33,9 @@ export default async function Home() {
       <LogoutBtn />
       <div style={{ height: "50px" }}><a href="/sign_up"> adf </a> </div>
 
-      {/* MainContainer에 자식 요소로 MainContent와 FloatingButton 전달 */}
       <MyComponents.MainContainer>
-        <MyComponents.MainContent result={result} />
+        {/* MainContent에 initialResult를 props로 전달 */}
+        <MyComponents.MainContent initialResult={result} />
         <MyComponents.FloatingButton />
       </MyComponents.MainContainer>
     </>
