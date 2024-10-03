@@ -1,0 +1,180 @@
+.splash,
+.splash * {
+  box-sizing: border-box;
+}
+.splash {
+  background: linear-gradient(
+    180deg,
+    rgba(31, 19, 69, 1) 0%,
+    rgba(9, 9, 9, 1) 49.98507797718048%
+  );
+  height: 852px;
+  position: relative;
+  overflow: hidden;
+}
+.bg {
+  width: 393px;
+  height: 852px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(1, 1);
+}
+.ellipse-623 {
+  background: radial-gradient(
+    closest-side,
+    rgba(145, 110, 220, 0.3) 0%,
+    rgba(9, 9, 9, 0) 100%
+  );
+  border-radius: 50%;
+  width: 588px;
+  height: 619px;
+  position: absolute;
+  left: calc(50% - 126.5px);
+  top: calc(50% - 639px);
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(1, 1);
+  filter: blur(50px);
+}
+.home-indicator {
+  padding: 8px 127px 8px 127px;
+  width: 393px;
+  height: 21px;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+}
+.home-indicator2 {
+  background: #bb9090;
+  border-radius: 100px;
+  width: 139px;
+  height: 5px;
+  position: absolute;
+  left: calc(50% - -69.5px);
+  bottom: 8px;
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(-1, 1);
+}
+.home-indicator3 {
+  background: #f2f2f2;
+  border-radius: 100px;
+  width: 139px;
+  height: 5px;
+  position: absolute;
+  left: calc(50% - -69.5px);
+  bottom: 8px;
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(-1, 1);
+}
+.status-bar {
+  background: rgba(0, 0, 0, 0.01);
+  width: 393px;
+  height: 59px;
+  position: absolute;
+  left: calc(50% - 196.5px);
+  top: 0px;
+  backdrop-filter: var(--bg-blur-45-backdrop-filter, blur(22.5px));
+}
+.time {
+  width: 35.75%;
+  height: 54px;
+  position: absolute;
+  right: 64.25%;
+  left: 0%;
+  top: calc(50% - 26.5px);
+}
+.time2 {
+  color: var(--white-100, #f0ecf1);
+  text-align: center;
+  font-family: "SfPro-Semibold", sans-serif;
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 600;
+  position: absolute;
+  right: 36.71%;
+  left: 36.96%;
+  width: 26.33%;
+  bottom: 25.3%;
+  top: 33.96%;
+  height: 40.74%;
+}
+.levels {
+  width: 35.75%;
+  height: 54px;
+  position: absolute;
+  right: 0%;
+  left: 64.25%;
+  top: calc(50% - 26.5px);
+}
+.battery {
+  height: 24.07%;
+  position: absolute;
+  left: calc(50% - -10.75px);
+  bottom: 33.33%;
+  top: 42.59%;
+  overflow: visible;
+}
+.wifi {
+  width: 17.14px;
+  height: 22.83%;
+  position: absolute;
+  left: calc(50% - 13.55px);
+  bottom: 33.4%;
+  top: 43.77%;
+  overflow: visible;
+}
+.cellular-connection {
+  width: 19.2px;
+  height: 22.64%;
+  position: absolute;
+  left: calc(50% - 40.25px);
+  bottom: 33.77%;
+  top: 43.58%;
+  overflow: visible;
+}
+.div {
+  color: var(--white-80, rgba(240, 236, 241, 0.8));
+  text-align: left;
+  font-family: var(
+    --body-16-regular-font-family,
+    "Pretendard-Regular",
+    sans-serif
+  );
+  font-size: var(--body-16-regular-font-size, 16px);
+  line-height: var(--body-16-regular-line-height, 150%);
+  font-weight: var(--body-16-regular-font-weight, 400);
+  position: absolute;
+  left: calc(50% - 96.5px);
+  top: 339.74px;
+}
+.rectangle-685 {
+  background: linear-gradient(
+    180deg,
+    rgba(145, 110, 220, 0.1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  width: 393px;
+  height: 396px;
+  position: absolute;
+  left: 0px;
+  top: 456px;
+}
+.iceberg {
+  width: 187.57px;
+  height: 258px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+}
+.innersight {
+  width: 192px;x
+  height: 39px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+}
