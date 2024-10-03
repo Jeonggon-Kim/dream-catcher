@@ -5,28 +5,47 @@ export default async function Home(props) {
   const client = await connectDB();
   const db = client.db("dream-catcher");
 
-  // 1. 해당 diary 문서 가져오기
+  // 1. Fetch the diary document
   let result = await db.collection('diary').findOne({ _id: new ObjectId(props.params.dream_id) });
 
-  // 2. 해당 diary_id를 참조하는 모든 chat 문서 가져오기
+  // 2. Fetch all chat documents referencing the diary_id
   const chatRecords = await db.collection('chat')
     .find({ diary_id: new ObjectId(props.params.dream_id) })
-    .sort({ timestamp: 1 }) // timestamp 순으로 정렬 (옵션)
+    .sort({ timestamp: 1 })
     .toArray();
+
+  const ChatMessage = ({ message, sender }) => (
+    <div
+      style={{
+        padding: "15px",
+        margin: "8px 0",
+        backgroundColor: sender === "user" ? "#3e3c61" : "transparent",
+        color: sender === "user" ? "#ffffff" : "#9e9e9e",
+        borderRadius: "15px",
+        fontFamily: "Arial, sans-serif",
+        maxWidth: "80%",
+        border: sender === "assistant" ? "1px solid #444" : "none",
+        alignSelf: sender === "user" ? "flex-end" : "flex-start",
+      }}
+    >
+      <span style={{ fontSize: "14px", lineHeight: "1.5" }}>{message}</span>
+    </div>
+  );
 
   return (
     <div
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
-        height: "80vh",
-        width: "400px",
-        margin: "auto",
+        justifyContent: "center",
+        height: "100%",
+        width: "100%",
+        padding: "0px",
+        margin: "0px",
         border: "1px solid #ddd",
         borderRadius: "8px",
-        padding: "10px",
-        backgroundColor: "rgb(249, 250, 255)",
+        backgroundColor: "#191933",
+        padding:"0px", margin:"0px", maxWidth: "400px", height:"1vh", minHeight: "100vh",
       }}
     >
       <div
@@ -48,27 +67,14 @@ export default async function Home(props) {
             boxShadow: "rgb(224, 224, 224) 0px 2px 4px 0px",
           }}
         >
+          <img src={`/images/${props.params.dream_id}.webp`} alt="Diary Icon" style={{ width: "100%", height: "300px",borderRadius: "12px" }} />
           <h2>Diary Summary</h2>
           <p>{result.content}</p>
         </div>
-
         {/* Chat History */}
-        <h3 style={{ textAlign: "center" }}>Chat History</h3>
+        <h3 style={{ textAlign: "center", color: "white"}}>Chat History</h3>
         {chatRecords.map((chat, index) => (
-          <div
-            key={index}
-            style={{
-              padding: "10px",
-              margin: "5px 0",
-              backgroundColor: chat.role === "user" ? "#d1f7c4" : "#f1f1f1",
-              alignSelf: chat.role === "user" ? "flex-end" : "flex-start",
-              borderRadius: "10px",
-              maxWidth: "70%",
-            }}
-          >
-            <strong>{chat.role === "user" ? "User" : "Assistant"}: </strong>
-            {chat.content}
-          </div>
+          <ChatMessage key={index} message={chat.content} sender={chat.role} />
         ))}
       </div>
     </div>

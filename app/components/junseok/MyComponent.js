@@ -22,9 +22,17 @@ export function TopBar({ leftContent, rightContent }) {
 
 export function FluentPerson() {
   return (
-    <Image src="/images/fluent_person-16-regular.svg" alt="My image" width={28} height={28} />
+    <a href="/mypage" >
+      <Image 
+        src="/images/fluent_person-16-regular.svg" 
+        alt="My image" 
+        width={28} 
+        height={28} 
+      />
+    </a>
   );
 }
+
 
 export function Button1({ children }) {
   return <button className={styles.Button1}>{children}</button>;

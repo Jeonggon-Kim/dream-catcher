@@ -4,7 +4,6 @@ import React from 'react';
 import { getServerSession } from "next-auth"; // Import getServerSession
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // Ensure this path is correct
 import { redirect } from "next/navigation";
-import LogoutBtn from "./components/jeonggon/LogoutBtn";
 
 export default async function Home() {
   // Get session info to check if the user is logged in
@@ -43,7 +42,6 @@ export default async function Home() {
   
   return (
     <>
-      <LogoutBtn/>     
       <div style={{height:"50px"}}><a href="/sign_up"> adf </a> </div>
       <div style={{padding:"0px", margin:"0px", height:"100%", width: "100%", backgroundColor: "black"}} className="list-bg">
         {/* Using MyComponents to reference all components */}
