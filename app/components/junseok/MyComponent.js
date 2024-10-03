@@ -117,7 +117,7 @@ export function DreamcardBox({ result = [] }) {
             <Image
               src={`/images/${diary._id}.webp`}
               alt="Bookmarked Dream"
-              width={180}
+              width={150}
               height={113}
               style={{ objectFit: 'cover', borderRadius: '12px' }}
             />
@@ -265,7 +265,7 @@ export function DiaryListItem({ diary, onBookmarkUpdate }) {
   };
 
   return (
-    <div className="diaryBigbox" style={{ display: "flex", alignItems: "start", gap: "16px", marginBottom: "12px", marginLeft:"16px",marginRight:"16px" }}>
+    <div className="diaryBigbox" style={{ display: "flex", alignItems: "start", gap: "16px", marginBottom: "12px",marginRight:"16px" }}>
       {/* 이미지 */}
       <img src={`/images/${diary._id}.webp`} alt="Diary Icon" style={{ width: "112px", height: "112px", borderRadius: "12px" }} />
 
@@ -371,7 +371,7 @@ const fetchUpdatedData = async () => {
       />
 
       {/* DiaryListItem을 스크롤 가능하도록 설정 */}
-      <div style={{ height: '500px', overflow: 'auto' }}>
+      <div className={styles.scrollContainer}>
         {sortedResult.length > 0 ? (
           sortedResult.map((diary, index) => (
             <DiaryListItem key={index} diary={diary} onBookmarkUpdate={handleBookmarkUpdate} />

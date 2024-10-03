@@ -25,6 +25,7 @@
 .mainContent {
   position: relative; /* 배경보다 위에 위치하도록 설정 */
   z-index: 1; /* z-index 값을 1로 설정해 배경보다 위에 있도록 함 */
+  height: 100%;
 }
 
 .TopBar {
@@ -310,8 +311,6 @@ line-height: 140%; /* 25.2px */
   font-weight: 500;
   line-height: 150%; /* 24px */
   margin-bottom: 5px; /* 기존 코드의 마진 값을 CSS에 포함 */
-  white-space: nowrap;
-
 }
 .diaryDate{
   color: var(--wireframe-3, #ADADAD);
@@ -366,7 +365,7 @@ line-height: 140%; /* 25.2px */
   border-radius: 99px;
   background: var(--white-100, #F0ECF1);
   position: absolute; /* 메인 영역 안에서 절대 위치 */
-  bottom: 16px; /* 메인 영역의 하단 기준으로 배치 */
+  bottom: 50px; /* 메인 영역의 하단 기준으로 배치 */
   right: 16px; /* 메인 영역의 오른쪽 기준으로 배치 */
 }
 
@@ -431,4 +430,17 @@ line-height: 140%; /* 25.2px */
   align-items: center; /* 자식 요소 수직 중앙 정렬 */
   overflow: hidden; /* 넘치는 요소가 보이지 않도록 설정 */
   gap: 12px; /* 슬라이드 간격 설정 */
+}
+
+.scrollContainer {
+  flex: 1; /* 남은 공간을 채우도록 설정 */
+  overflow: auto; /* 스크롤 기능 유지 */
+  margin:16px;
+  max-height: 500px; /* 최대 높이 설정 */
+}
+/* 스크롤 바 숨기기 */
+.scrollContainer::-webkit-scrollbar {
+  display: none; /* 웹킷 기반 브라우저에서 스크롤 바 숨기기 */
+  overflow: auto;
+  height:800px;
 }
