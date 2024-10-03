@@ -38,3 +38,7 @@ body {
 
 -ms-overflow-style: none;  /* For Internet Explorer and Edge */
 scrollbar-width: none;  /* For Firefox */
+
+/* styles/globals.css */
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
