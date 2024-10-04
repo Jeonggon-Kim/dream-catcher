@@ -27,6 +27,11 @@ export default async function Home() {
   }
 
   let result = await db.collection('diary').find({ user_email: session.user.email }).toArray();
+   // 직렬화 가능하게 `_id` 필드를 문자열로 변환
+   result = result.map(diary => ({
+    ...diary,
+    _id: diary._id.toString(),
+  }));
 
   return (
     <>
