@@ -30,7 +30,6 @@ export default async function Home() {
 
   return (
     <>
-      <LogoutBtn />
       <div style={{ height: "50px" }}><a href="/sign_up"> adf </a> </div>
 
       <MyComponents.MainContainer>

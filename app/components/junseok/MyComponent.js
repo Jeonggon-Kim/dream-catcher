@@ -275,7 +275,12 @@ export function DiaryListItem({ diary, onBookmarkUpdate }) {
   return (
     <div className="diaryBigbox" style={{ display: "flex", alignItems: "start", gap: "16px", marginBottom: "12px",marginRight:"16px" }}>
       {/* 이미지 */}
-      <img src={`/images/${diary._id}.webp`} alt="Diary Icon" style={{ width: "112px", height: "112px", borderRadius: "12px" }} />
+      <img
+        src={`/images/${diary._id}.webp`}
+        alt="Diary Icon"
+        style={{ width: "112px", height: "112px", borderRadius: "12px" }}
+        onError={(e) => e.target.src = "/images/default_image.webp"} // Fallback to default image
+      />
 
       {/* 이미지 옆에 전체 Flexbox를 추가 */}
       <div className={styles.diaryContentContainer}>

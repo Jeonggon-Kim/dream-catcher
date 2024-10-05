@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-// import { connectDB } from "@/util/database"; // MongoDB 연결 함수 가져오기
-// import { ObjectId } from "mongodb";
+import { connectDB } from "@/util/database";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
+import { generateImage } from "@/util/stabilityAI";
+
 // OpenAI 설정
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_KEY,
@@ -9,9 +12,16 @@ const openai = new OpenAI({
 
 export async function POST(request) {
   try {
-    const { userMessage, chatHistory } = await request.json();
-    // OpenAI에 보낼 메시지 구조 생성
-    const messages = [
+    // Extract the request data, including the new isFirstResponse flag
+    const { userMessage, chatHistory, isFirstResponse } = await request.json();
+    const session = await getServerSession(authOptions);
+
+    // Initialize variables to be used later
+    let diaryTitle = null;
+    let diaryId = null;
+
+    // Initialize the system messages
+    const systemMessages = [
       {
         role: "system",
         content: "당신은 꿈 해석 전문가입니다. 다음 지침을 따라 사용자의 꿈을 분석하고 해석해주세요.",
@@ -34,30 +44,87 @@ export async function POST(request) {
           5. 질문에 대한 충분한 답변을 받은 후, 종합적인 꿈 해석과 현실 생활과의 연관성을 설명해주세요.
         `,
       },
-    ...chatHistory,
+    ];
+
+    // Combine system messages with chat history
+    const messages = [
+      ...systemMessages,
+      ...chatHistory,
       { role: "user", content: userMessage },
     ];
 
-    // OpenAI에 API 요청 보내기
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4",
       messages: messages,
     });
-
     const botResponse = completion.choices[0].message.content;
 
-    // MongoDB 연결
-    // const client = await connect);DB;
-    // const db = client.db("dream-catcher"); // 데이터베이스 이름
-    // const chatCollection = db.collection("chat" // 컬렉션 이름
-    // // MongoDB에 새로운 채팅 기록 추가
-    // await chatCollection.insertOne({
-    //   user: userMessage,
-    //   assistant: botResponse,
-    //   timestamp: new Date(), // 저장 시각 추가 (옵션)
-    // });
+    // If it's the first response, handle the diary and image generation
+    if (isFirstResponse) {
+      console.log('first response')
+      const titleCompletion = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: "Create a concise title for the dream that the user dreamt in Korean",
+          },
+          ...chatHistory,
+          {
+            role: "user",
+            content: "Create a concise title for the dream that the user dreamt in Korean",
+          },
+        ],
+        max_tokens: 50,
+      });
 
-    return NextResponse.json({ botResponse });
+      const titleCompletionEnglish = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: "Create a concise title for the dream that the user dreamt",
+          },
+          ...chatHistory,
+          {
+            role: "user",
+            content: "Create a concise title for the dream that the user dreamt",
+          },
+        ],
+        max_tokens: 50,
+      });
+
+      diaryTitle = titleCompletion.choices[0].message.content.trim();
+      const diaryTitleEnglish = titleCompletionEnglish.choices[0].message.content.trim();
+
+      console.log(diaryTitle)
+      console.log(diaryTitleEnglish)
+
+      const client = await connectDB();
+      const db = client.db("dream-catcher");
+      const diaryCollection = db.collection("diary");
+
+      const diaryResult = await diaryCollection.insertOne({
+        title: diaryTitle,
+        content: "",
+        created_at: new Date(),
+        is_bookmark: false,
+        user_email: session.user.email,
+      });
+
+      diaryId = diaryResult.insertedId;
+      // Generate image in the background
+      generateImage(diaryTitleEnglish, diaryId)
+        .then((imagePath) => {
+          console.log(imagePath);
+        })
+        .catch((error) => {
+          console.error("Error generating image or updating the database:", error);
+        });
+    }
+
+    // Return botResponse and optionally diary info (if first response)
+    return NextResponse.json({ botResponse, diaryTitle, diaryId });
   } catch (error) {
     console.error("Error fetching GPT response:", error);
     return NextResponse.json(

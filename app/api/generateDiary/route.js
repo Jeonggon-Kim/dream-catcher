@@ -1,10 +1,9 @@
-// /app/api/generateImage/route.js
 import { NextResponse } from "next/server";
 import { connectDB } from "@/util/database";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
-import { generateImage } from "@/util/stabilityAI";
 import OpenAI from "openai";
+import { ObjectId } from "mongodb";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_KEY,
@@ -12,7 +11,7 @@ const openai = new OpenAI({
 
 export async function POST(request) {
   try {
-    const { chatHistory } = await request.json();
+    const { chatHistory, diaryId } = await request.json();
 
     const session = await getServerSession(authOptions);
 
@@ -38,57 +37,23 @@ export async function POST(request) {
 
     const diarySummary = completion.choices[0].message.content;
 
-    // Generate a title based on the summary
-    const titleCompletion = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        {
-          role: "system",
-          content: "무조건 한국말로. 유저가 꾼 꿈에 대해 간결한 제목을 달아줘",
-        },
-        ...chatHistory,
-        {
-          role: "user",
-          content: "무조건 한국말로. 내가 꾼 꿈에 대해 간결한 제목을 달아줘",
-        },
-      ],
-      max_tokens: 50,
-    });
-
-    const titleCompletionEnglish = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        {
-          role: "system",
-          content: "Create a concise title for the dream that the user dreamt",
-        },
-        ...chatHistory,
-        {
-          role: "user",
-          content: "Create a concise title for the dream that the user dreamt",
-        },
-      ],
-      max_tokens: 50,
-    });
-
-    const diaryTitle = titleCompletion.choices[0].message.content.trim();
-    const diaryTitleEnglish = titleCompletionEnglish.choices[0].message.content.trim();
-
     // Connect to MongoDB
     const client = await connectDB();
     const db = client.db("dream-catcher");
     const diaryCollection = db.collection("diary");
 
-    // Save the diary summary
-    const diaryResult = await diaryCollection.insertOne({
-      title: diaryTitle,
-      content: diarySummary,
-      created_at: new Date(),
-      is_bookmark: false,
-      user_email: session.user.email,
-    });
+    // Update the diary with the new content using the provided diaryId
+    const updateResult = await diaryCollection.updateOne(
+      { _id: new ObjectId(diaryId) }, // Use the passed diaryId
+      { $set: { content: diarySummary } }
+    );
 
-    const diaryId = diaryResult.insertedId;
+    if (updateResult.matchedCount === 0) {
+      return NextResponse.json(
+        { error: "Diary not found" },
+        { status: 404 }
+      );
+    }
 
     // Save chat history
     const chatCollection = db.collection("chat");
@@ -96,27 +61,20 @@ export async function POST(request) {
       await chatCollection.insertOne({
         role: chat.role === "user" ? "user" : "assistant",
         content: chat.content,
-        diary_id: diaryId,
+        diary_id: new ObjectId(diaryId),
       });
     }
 
-    console.log('111111111111111111111111')
-    // Generate the image using the Stability AI utility function
-    const imagePath = await generateImage(diaryTitleEnglish, diaryId);
-    console.log('222222222222222222222')
-    console.log(imagePath)
-    // Update the diary entry with the image path
-    await diaryCollection.updateOne({ _id: diaryId }, { $set: { image_path: imagePath } });
-
+    // Respond immediately with the updated diary details
     return NextResponse.json({
-      title: diaryTitle,
+      message: "Diary updated successfully",
       content: diarySummary,
-      imagePath: imagePath,
+      diaryId: diaryId,
     });
   } catch (error) {
-    console.error("Error generating diary summary or image:", error);
+    console.error("Error updating diary content:", error);
     return NextResponse.json(
-      { error: "Error generating diary summary or image" },
+      { error: "Error updating diary content" },
       { status: 500 }
     );
   }
