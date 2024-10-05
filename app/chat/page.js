@@ -27,13 +27,21 @@ const ChatUI = () => {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [isFirstResponse, setIsFirstResponse] = useState(true); // Track if this is the first GPT response
-  const [diaryId, setDiaryId] = useState(null); // State to store diaryId
-  const [diaryTitle, setDiaryTitle] = useState(""); // State to store diaryTitle
-  const [imageSrc, setImageSrc] = useState("/images/default_image.webp"); // Image source
-  const [displayedTitle, setDisplayedTitle] = useState("제목: "); // State for title animation
+  const [isFirstResponse, setIsFirstResponse] = useState(true);
+  const [diaryId, setDiaryId] = useState(null);
+  const [diaryTitle, setDiaryTitle] = useState("");
+  const [imageSrc, setImageSrc] = useState("/images/default_image.webp");
+  const [displayedTitle, setDisplayedTitle] = useState("제목: ");
+  const [recognition, setRecognition] = useState(null); // Recognition state 추가
   const router = useRouter();
 
+  // handleKeyPress 함수 추가
+const handleKeyPress = (event) => {
+  if (event.key === "Enter") {
+    handleSend();
+  }
+};
+  
   // 타이핑 애니메이션 (제목)
   useEffect(() => {
     if (diaryTitle) {
@@ -41,26 +49,35 @@ const ChatUI = () => {
       const intervalId = setInterval(() => {
         setDisplayedTitle((prev) => prev + diaryTitle[currentIndex]);
         currentIndex++;
-        if (currentIndex === diaryTitle.length - 2 ) { // 마지막 글자까지 포함
-          clearInterval(intervalId); 
+        if (currentIndex === diaryTitle.length - 2) {
+          clearInterval(intervalId);
         }
-      }, 100); // 100ms마다 한 글자씩 추가
-      return () => clearInterval(intervalId); // Cleanup
+      }, 100);
+      return () => clearInterval(intervalId);
     }
   }, [diaryTitle]);
 
+  // SpeechRecognition 설정을 useEffect로 클라이언트 사이드에서만 실행
+  useEffect(() => {
+    const SpeechRecognition =
+      typeof window !== "undefined" &&
+      (window.SpeechRecognition || window.webkitSpeechRecognition);
+    const recognitionInstance = SpeechRecognition ? new SpeechRecognition() : null;
 
-  // SpeechRecognition setup
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+    if (recognitionInstance) {
+      recognitionInstance.continuous = true;
+      recognitionInstance.lang = "ko-KR";
+      recognitionInstance.interimResults = false;
+      recognitionInstance.maxAlternatives = 1;
 
-  if (recognition) {
-    recognition.continuous = true;
-    recognition.lang = "ko-KR";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-  }
+      recognitionInstance.onresult = (event) => {
+        const speechResult = event.results[0][0].transcript;
+        setInputValue(speechResult);
+      };
+    }
+
+    setRecognition(recognitionInstance);
+  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행
 
   const handleSend = async () => {
     if (inputValue.trim()) {
@@ -83,7 +100,7 @@ const ChatUI = () => {
           body: JSON.stringify({
             userMessage: inputValue.trim(),
             chatHistory,
-            isFirstResponse, // Pass the first response flag
+            isFirstResponse,
           }),
         });
 
@@ -95,12 +112,12 @@ const ChatUI = () => {
 
           if (isFirstResponse) {
             if (data.diaryId) {
-              setDiaryId(data.diaryId); // Save diaryId for later use
+              setDiaryId(data.diaryId);
             }
             if (data.diaryTitle) {
-              setDiaryTitle(data.diaryTitle); // Update the chat title with diaryTitle
+              setDiaryTitle(data.diaryTitle);
             }
-            setIsFirstResponse(false); // Mark as no longer the first response
+            setIsFirstResponse(false);
           }
         } else {
           const errorMessage = {
@@ -122,12 +139,6 @@ const ChatUI = () => {
     }
   };
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      handleSend();
-    }
-  };
-
   const handleVoiceInput = () => {
     if (!recognition) {
       alert("Your browser does not support speech recognition.");
@@ -143,11 +154,6 @@ const ChatUI = () => {
     setIsRecording(!isRecording);
   };
 
-  recognition.onresult = (event) => {
-    const speechResult = event.results[0][0].transcript;
-    setInputValue(speechResult);
-  };
-
   const handleEndChat = async () => {
     try {
       const chatHistory = messages.map((msg) => ({
@@ -160,7 +166,6 @@ const ChatUI = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        // Include the diaryId in the body when ending the chat
         body: JSON.stringify({ chatHistory, diaryId }),
       });
 
@@ -183,14 +188,13 @@ const ChatUI = () => {
       if (diaryId) {
         const img = new Image();
         img.src = `/images/${diaryId}.webp`;
-        img.onload = () => setImageSrc(img.src); // If the image is found, set it
-        img.onerror = () => setImageSrc("/images/default_image.webp"); // If not, keep the loading image
+        img.onload = () => setImageSrc(img.src);
+        img.onerror = () => setImageSrc("/images/default_image.webp");
       }
     };
 
     const intervalId = setInterval(checkImageExists, 3000);
-
-    return () => clearInterval(intervalId); // Cleanup the interval when component unmounts
+    return () => clearInterval(intervalId);
   }, [diaryId]);
 
   return (
@@ -211,9 +215,8 @@ const ChatUI = () => {
       }}
     >
       <p style={{ textAlign: "center", color: "#ffffff", fontSize: "18px" }}>
-        {displayedTitle} {/* Display the diary title dynamically, but prevent undefined */}
+        {displayedTitle}
       </p>
-
 
       <div
         style={{
@@ -245,7 +248,6 @@ const ChatUI = () => {
         ))}
       </div>
 
-      {/* Input and Send Button Area */}
       <div
         style={{
           position: "relative",
@@ -325,7 +327,6 @@ const ChatUI = () => {
         </div>
       </div>
 
-      {/* End Chat Button */}
       <button
         onClick={handleEndChat}
         style={{
