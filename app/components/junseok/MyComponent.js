@@ -116,19 +116,24 @@ export function DreamcardBox({ result = [] }) {
     className: `${styles.sliderWrapper} ${styles.customSlickContainer}`, // customSlickContainer 스타일 적용
   };
 
+  // 새 데이터가 반영될 때 슬라이더를 다시 렌더링
+  useEffect(() => {
+    window.dispatchEvent(new Event('resize'));
+  }, [result]);
+
   return (
     <div className={styles.sliderWrapper}>
       <Slider {...settings}>
         {bookmarkedDiaries.map((diary, index) => (
           <div className={styles.slickSlide} key={diary._id}>
             <a href={`chat/${diary._id}`} className={styles.diaryTitle}>
-            <Image
-              src={`/images/${diary._id}.webp`}
-              alt="Bookmarked Dream"
-              width={150}
-              height={113}
-              style={{ objectFit: 'cover', borderRadius: '12px' }}
-            />
+              <Image
+                src={`/images/${diary._id}.webp`}
+                alt="Bookmarked Dream"
+                width={150}
+                height={113}
+                style={{ objectFit: 'cover', borderRadius: '12px' }}
+              />
             </a>
           </div>
         ))}
@@ -136,7 +141,6 @@ export function DreamcardBox({ result = [] }) {
     </div>
   );
 }
-
 export function Dreamcard1() {
   return (
     <div style={{ flexShrink: 0, borderRadius: '12px' }}>
@@ -260,10 +264,15 @@ export function DiaryListItem({ diary, onBookmarkUpdate }) {
       await axios.post('/api/bookmark', {
         diaryId: diary._id,
         isBookmark: newBookmarkState,
+      }, {
+        headers: {
+          'Cache-Control': 'no-cache',
+        }
       });
+      
 
       // 부모 컴포넌트에 알림
-      onBookmarkUpdate(); 
+      onBookmarkUpdate(diary._id, newBookmarkState);
     } catch (error) {
       console.error('Failed to update bookmark:', error);
 
@@ -306,6 +315,7 @@ export function DiaryListItem({ diary, onBookmarkUpdate }) {
   );
 }
 
+
   export  function FloatingButton() {
     return (
       <a href={`/chat`} className={styles.floatingButton}>
@@ -331,19 +341,23 @@ export function MainContent({ initialResult }) {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
   // 북마크 업데이트 후 데이터 다시 가져오기
-const fetchUpdatedData = async () => {
-  try {
-    const { data } = await axios.get('/api/getDiaries');
-    console.log("Fetched Diaries: ", data); // 서버에서 가져온 데이터를 확인
-    setResult(data); // result 상태를 업데이트
-  } catch (error) {
-    console.error('Failed to fetch diaries:', error);
-  }
-};
+  const fetchUpdatedData = async () => {
+    try {
+      const { data } = await axios.get('/api/getDiaries');
+      setResult(data); // result 상태를 업데이트
+    } catch (error) {
+      console.error('Failed to fetch diaries:', error);
+    }
+  };
 
   // 북마크 업데이트 핸들러 (DiaryListItem 컴포넌트에서 호출)
-  const handleBookmarkUpdate = () => {
-    fetchUpdatedData(); // 데이터를 다시 가져옴
+  const handleBookmarkUpdate = (diaryId, newBookmarkState) => {
+    // 북마크 상태를 result에 즉시 반영
+    setResult((prevResult) => 
+      prevResult.map((diary) => 
+        diary._id === diaryId ? { ...diary, is_bookmark: newBookmarkState } : diary
+      )
+    );
   };
 
   // 정렬 기준에 따라 result를 정렬

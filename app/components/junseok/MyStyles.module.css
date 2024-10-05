@@ -354,19 +354,20 @@ line-height: 140%; /* 25.2px */
 
 /* 플로팅 버튼 스타일 */
 .floatingButton {
-  width: 60px; /* 버튼 너비 */
-  height: 60px; /* 버튼 높이 */
-  border-radius: 50%; /* 버튼을 원형으로 설정 */
-  cursor: pointer; /* 마우스를 올렸을 때 커서 모양 변경 */
-  z-index: 1000; /* 다른 요소보다 위에 표시되도록 설정 */
+  position: absolute; /* 부모 요소인 MainContainer를 기준으로 위치 */
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 99px;
   background: var(--white-100, #F0ECF1);
-  position: absolute; /* 메인 영역 안에서 절대 위치 */
-  bottom: 50px; /* 메인 영역의 하단 기준으로 배치 */
-  right: 16px; /* 메인 영역의 오른쪽 기준으로 배치 */
+  right: 16px; /* MainContainer 오른쪽으로부터 16px */
+  bottom: 47px; /* MainContainer 아래쪽으로부터 47px */
+  left: 317px; /* MainContainer 왼쪽으로부터 317px */
+  top: 745px; /* MainContainer 위쪽으로부터 745px */
 }
 
 /* 플로팅 버튼 이미지 스타일 */
@@ -436,7 +437,7 @@ line-height: 140%; /* 25.2px */
   flex: 1; /* 남은 공간을 채우도록 설정 */
   overflow: auto; /* 스크롤 기능 유지 */
   margin:16px;
-  max-height: 500px; /* 최대 높이 설정 */
+  max-height: 700px; /* 최대 높이 설정 */
 }
 /* 스크롤 바 숨기기 */
 .scrollContainer::-webkit-scrollbar {
