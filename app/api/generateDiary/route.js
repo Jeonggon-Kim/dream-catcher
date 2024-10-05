@@ -22,13 +22,19 @@ export async function POST(request) {
       );
     }
 
-    // Generate a summary of the chat history
     const completion = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
         {
           role: "system",
-          content: "무조건 한국말로. 사용자와의 대화를 자연스럽게 이어가며, 꿈에 대한 깊이 있는 해석을 제공하세요.",
+          content: `Answer always in Korean, but in maximum 400 Korean letters. Create a deep analysis on the users dream based on the conversation. 
+          Following is the user information.
+          name: ${session.user}
+          birth_date: ${session.user.birth_date}
+          gender: ${session.user.gender}
+          job: ${session.user.occupation}
+          Make sure you emphathize with the user and relate the dream to the user's personal experience.
+          `
         },
         ...chatHistory,
       ],
